@@ -1,35 +1,47 @@
-# GamerChat
+# AI Government Assistance Advisor
 
-Created by:
-- Alan Shirk
-- Joseph Gafron
+> An AI-powered recommendation system that fine-tuned OpenAI language models to recommend Oregon government assistance programs using synthetically generated training data.
 
-Repository link: https://github.com/ashirk94/GamerChat
+## Overview
 
-Our GamerChat project is structured within two parts, the frontend and the backend. The frontend, built with React and styled with CSS, has multiple components such as ProfilePage and GroupChatPage, along with a fixed navbar for easy navigation. We used React libraries like react-bootstrap and react-toastify for the UI and notifications. State management is handled with the Redux Toolkit, which uses slices like authSlice.js and usersApiSlice to manage authentication and API interactions efficiently. authSlice.js handles user login, logout, and session management, while usersApiSlice manages API calls related to user profiles and data fetching. 
-    
-We used js-cookie for handling tokens, ensuring secure storage and retrieval of authentication tokens. The backend, implemented in Node.js with Express, manages user authentication, profile data, and real-time messaging via Socket.io. MongoDB is used as the database to store user information, messages, and other application data. For profile editing, Multer is used to handle file uploads, such as profile pictures. Middleware is implemented to protect routes, ensuring that only authenticated users can access certain parts of the application. Vite is used as the build tool for React, providing a fast and efficient development environment. For testing, Babel converts our format into a readable format for Jest, which we used to perform feature and system testing. 
+This repository holds the datasets, fine-tuning artifacts, and supporting materials from a university machine learning project focused on building a domain-specific AI assistant that recommends Oregon government assistance programs.
 
-We performed our backend system tests, and some frontend feature and unit testing. From these tests, we obtained 11 passing tests (4 on the backend, 7 on the frontend). We tested the Chat Page, Login Page, and Register Page. 
+Rather than hand-writing hundreds of training examples, I started by researching Oregon's assistance programs and documenting their eligibility requirements, factors like household size, monthly income, age, pregnancy status, disability, residency, veteran status, and other program-specific qualifications.
 
-The front-end testing consisted of a few different tests. For the Login Page we tested that the Login Page renders correctly, and whether or not the page gracefully handles errors when the login form is empty. For the Chat Page, we tested both the Delete Chat and Clear Chat features. Finally, the Register Page was tested to check if the page correctly handles empty submitted forms, mismatching passwords, and renders the page correctly. 
+To keep the training data consistent and high-quality, I built a Python-based synthetic data generator that created applicant profiles by varying demographic attributes, then determined which assistance programs each synthetic applicant actually qualified for based on the documented eligibility rules. That gave us a large, internally consistent training dataset without the manual effort of writing every example by hand.
 
-Our system testing consisted of checking for XSS Prevention and No-SQL Injection Prevention. Our tests mocked the database connection using 'jest.mock', and configured an Express application with custom logging middleware. The testing also performs a health check to see the application is up, and whether non-existent routes deliver the necessary error (404). 
+The generated examples were converted into OpenAI's JSONL fine-tuning format and used to fine-tune multiple OpenAI language models. We ran and compared several training runs to improve recommendation consistency and overall response quality.
 
-In order to run the tests, run following commands:
+The finished model was integrated into a university prototype where users could describe their situation in plain language and get back personalized government assistance recommendations.
 
-```
-cd server
-npm test
-cd ../client
-npm test
-```
+## Project Workflow
 
-To run the project locally, run the following command in the root directory:
-```
-npm run dev
-```
+1. Research Oregon government assistance programs and document eligibility requirements.
+2. Encode eligibility criteria into structured training data.
+3. Generate synthetic applicant profiles using a custom Python data generation tool.
+4. Automatically determine applicant eligibility based on program rules.
+5. Convert generated examples into OpenAI JSONL fine-tuning datasets.
+6. Fine-tune multiple OpenAI language models.
+7. Evaluate model performance and iterate on training data quality.
 
-The application is also running on a Heroku server.
+## Repository Structure
 
-Live server link: https://gamer-chat-161acd6cf748.herokuapp.com/
+**`training_data/`**
+The primary datasets used to train the model: the final OpenAI chat-format training dataset, program-specific eligible/ineligible examples, and earlier dataset iterations.
+
+**`pet_data/`**
+Additional datasets showing the same synthetic data generation approach extended to pet assistance programs.
+
+**`metrics/`**
+Training metrics and fine-tuning results.
+
+**`presentation/`**
+The university presentation covering the overall system and architecture.
+
+## Technologies
+
+Python, OpenAI Fine-Tuning, JSON/JSONL, Prompt Engineering, Synthetic Data Generation
+
+## Note
+
+This repository preserves the datasets and fine-tuning artifacts from the original university project. The deployed application and portions of the original generation pipeline were built as part of a team project and aren't included here.
